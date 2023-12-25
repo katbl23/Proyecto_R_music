@@ -3,9 +3,9 @@ title: "R Notebook"
 output: html_notebook
 ---
 
-This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code.
 
-Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*.
 
 ```{r}
 plot(cars)
@@ -16,3 +16,21 @@ Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by press
 When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
 
 The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+
+En el próximo proyecto, nos sumergiremos en un fascinante conjunto de datos musical, donde exploraremos diversas relaciones entre elementos clave. Desde analizar la tonalidad de las composiciones hasta examinar la rapidez y la bailabilidad, nuestro objetivo es desentrañar patrones y descubrir conexiones significativas en el vasto mundo de la música. A través de este análisis, buscamos profundizar en la comprensión de cómo estos elementos se entrelazan para crear experiencias sonoras únicas e impactantes.
+
+# Importar Datos
+
+```{r}
+data<-read.csv("C:/Users/Direccion Ser/Documents/cursoR/Proyecto_R_music/genres_v2.csv")
+data
+```
+
+# **Exploraciòn de datos**
+
+Con el objetivo de familiarizarnos con los datos, llevamos a cabo una exploración detallada de sus dimensiones y examinamos las primeras líneas del conjunto. Esta práctica nos proporciona un reconocimiento inicial de la estructura y características fundamentales de los datos. Al revisar las dimensiones, obtenemos información valiosa sobre la cantidad de observaciones y variables presentes, mientras que la inspección de las primeras líneas nos ofrece una visión preliminar de los valores y formatos de los datos. Este paso es esencial para establecer un punto de partida informado antes de embarcarnos en análisis más profundos y específicos.
+
+```{r}
+dim(data)
+head(data)
+```
