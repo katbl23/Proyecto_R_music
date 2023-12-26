@@ -93,6 +93,40 @@ La identificación y gestión de valores atípicos en un conjunto de datos son p
 boxplot(data$loudness, horizontal = TRUE, axes = TRUE, staplewex = 1)
 text(x = fivenum(data$loudness), y = rep(0.8, 5), labels = as.character(fivenum(data$loudness)), pos = 2)
 
-
-
 ```
+```{r}
+# Obtener los estadísticos de resumen
+estadisticos_loudness <- fivenum(data$loudness)
+
+# Concatenar las etiquetas
+etiquetas <- c("Mínimo", "1er Cuartil", "Mediana", "3er Cuartil", "Máximo")
+
+# Imprimir los resultados al lado de los estadísticos
+dataloudness<-data.frame(Estadistico = etiquetas, Valor = estadisticos_loudness)
+dataloudness
+```
+
+```{r}
+estadisticos_energy<-fivenum(data$energy)
+etiquetas <- c("Mínimo", "1er Cuartil", "Mediana", "3er Cuartil", "Máximo")
+data_energy<-data.frame(Estadisticos=etiquetas, valor=estadisticos_energy)
+
+data_energy
+boxplot(data$energy, horizontal = TRUE, axes = TRUE, staplewex = 1)
+```
+Para la energy se tienen los siguientes datos:
+
+Mínimo	0.188			
+1er Cuartil	0.819			
+Mediana	0.909			
+3er Cuartil	0.957			
+Máximo	1.000
+
+La observación de estos datos, respaldada por la representación visual proporcionada por el boxplot, sugiere una distribución asimétrica negativa. Este patrón indica que la mayoría de las observaciones se encuentran concentradas en la parte superior del rango, mientras que existen algunas observaciones extremadamente bajas que afectan la simetría de la distribución. La cola izquierda más larga indica la presencia de valores atípicos hacia los extremos inferiores. Este tipo de asimetría resalta una tendencia hacia valores más bajos en la distribución, lo que puede tener implicaciones importantes para la interpretación y el análisis de los datos
+
+Para los loudness se tienen los siguientes datos:
+Mínimo	-26.172			
+1er Cuartil	-7.595			
+Mediana	-5.768			
+3er Cuartil	-3.873			
+Máximo	3.108	
