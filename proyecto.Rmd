@@ -17,6 +17,14 @@ When you save the notebook, an HTML file containing the code and output will be 
 
 The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
 
+```{r}
+install.packages("naniar")
+# Importa el paquete
+library(naniar)
+```
+
+
+
 En el próximo proyecto, nos sumergiremos en un fascinante conjunto de datos musical, donde exploraremos diversas relaciones entre elementos clave. Desde analizar la tonalidad de las composiciones hasta examinar la rapidez y la bailabilidad, nuestro objetivo es desentrañar patrones y descubrir conexiones significativas en el vasto mundo de la música. A través de este análisis, buscamos profundizar en la comprensión de cómo estos elementos se entrelazan para crear experiencias sonoras únicas e impactantes.
 
 # Importar Datos
@@ -32,5 +40,35 @@ Con el objetivo de familiarizarnos con los datos, llevamos a cabo una exploraci�
 
 ```{r}
 dim(data)
-head(data)
+summary(data)
+```
+
+# Duplicados y valores nulos
+
+```{r}
+ordenada <- data[order(data$id,data$key), ]
+
+ordenada
+
+
+```
+
+```{r}
+data_<-ordenada[duplicated(ordenada$song_name), ]
+data_
+```
+
+```{r}
+sum(is.na(data))
+
+```
+
+```{r}
+
+# Función personalizada para contar ceros en un vector
+cantidad_nulos_por_columna <- colSums(is.na(data))
+
+columnas_con_nulos <- names(cantidad_nulos_por_columna[cantidad_nulos_por_columna > 0])
+
+
 ```
