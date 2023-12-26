@@ -64,7 +64,7 @@ sum(is.na(data))
 ```
 
 ```{r}
-
+library(naniar)
 # Función personalizada para contar ceros en un vector
 cantidad_nulos_por_columna <- colSums(is.na(data))
 
