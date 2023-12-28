@@ -1,15 +1,13 @@
 ---
 title: "R Notebook"
-output: html_notebook
+output: html_document
 ---
 
 This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code.
 
 Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*.
 
-```{r}
-plot(cars)
-```
+`{(plot(cars))}`
 
 Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
 
@@ -21,6 +19,13 @@ The preview shows you a rendered HTML copy of the contents of the editor. Conseq
 install.packages("naniar")
 # Importa el paquete
 library(naniar)
+library(dplyr)
+
+```
+
+```{r}
+library(ggplot2)
+library(corrplot)
 ```
 
 En el próximo proyecto, nos sumergiremos en un fascinante conjunto de datos musical, donde exploraremos diversas relaciones entre elementos clave. Desde analizar la tonalidad de las composiciones hasta examinar la rapidez y la bailabilidad, nuestro objetivo es desentrañar patrones y descubrir conexiones significativas en el vasto mundo de la música. A través de este análisis, buscamos profundizar en la comprensión de cómo estos elementos se entrelazan para crear experiencias sonoras únicas e impactantes.
@@ -52,8 +57,8 @@ ordenada
 ```
 
 ```{r}
-data_<-ordenada[duplicated(ordenada$song_name), ]
-data_
+data<-ordenada[duplicated(ordenada$song_name), ]
+data
 ```
 
 ```{r}
@@ -86,14 +91,16 @@ sum(is.na(data))
 dim(data)
 ```
 
-# Valores atipicos 
+# Valores atipicos
 
-La identificación y gestión de valores atípicos en un conjunto de datos son pasos cruciales para garantizar la integridad y la validez de los análisis. Un método efectivo para visualizar y abordar estos valores atípicos es mediante el uso de diagramas de caja, también conocidos como boxplots. Estos gráficos proporcionan una representación visual clara de la distribución de los datos, destacando la presencia de posibles valores extremos. La caja en el diagrama abarca el rango intercuartil, mientras que los puntos fuera de los llamados 'bigotes' indican la existencia de valores que podrían considerarse atípicos. 
+La identificación y gestión de valores atípicos en un conjunto de datos son pasos cruciales para garantizar la integridad y la validez de los análisis. Un método efectivo para visualizar y abordar estos valores atípicos es mediante el uso de diagramas de caja, también conocidos como boxplots. Estos gráficos proporcionan una representación visual clara de la distribución de los datos, destacando la presencia de posibles valores extremos. La caja en el diagrama abarca el rango intercuartil, mientras que los puntos fuera de los llamados 'bigotes' indican la existencia de valores que podrían considerarse atípicos.
+
 ```{r}
 boxplot(data$loudness, horizontal = TRUE, axes = TRUE, staplewex = 1)
 text(x = fivenum(data$loudness), y = rep(0.8, 5), labels = as.character(fivenum(data$loudness)), pos = 2)
 
 ```
+
 ```{r}
 # Obtener los estadísticos de resumen
 estadisticos_loudness <- fivenum(data$loudness)
@@ -114,19 +121,272 @@ data_energy<-data.frame(Estadisticos=etiquetas, valor=estadisticos_energy)
 data_energy
 boxplot(data$energy, horizontal = TRUE, axes = TRUE, staplewex = 1)
 ```
+
 Para la energy se tienen los siguientes datos:
 
-Mínimo	0.188			
-1er Cuartil	0.819			
-Mediana	0.909			
-3er Cuartil	0.957			
-Máximo	1.000
+Mínimo 0.188\
+1er Cuartil 0.819\
+Mediana 0.909\
+3er Cuartil 0.957\
+Máximo 1.000
 
 La observación de estos datos, respaldada por la representación visual proporcionada por el boxplot, sugiere una distribución asimétrica negativa. Este patrón indica que la mayoría de las observaciones se encuentran concentradas en la parte superior del rango, mientras que existen algunas observaciones extremadamente bajas que afectan la simetría de la distribución. La cola izquierda más larga indica la presencia de valores atípicos hacia los extremos inferiores. Este tipo de asimetría resalta una tendencia hacia valores más bajos en la distribución, lo que puede tener implicaciones importantes para la interpretación y el análisis de los datos
 
-Para los loudness se tienen los siguientes datos:
-Mínimo	-26.172			
-1er Cuartil	-7.595			
-Mediana	-5.768			
-3er Cuartil	-3.873			
-Máximo	3.108	
+Para los loudness se tienen los siguientes datos: Mínimo -26.172\
+1er Cuartil -7.595\
+Mediana -5.768\
+3er Cuartil -3.873\
+Máximo 3.108
+
+```{r}
+boxplot(data$speechiness, horizontal = TRUE, axes = TRUE, staplewex = 1)
+```
+
+```{r}
+valores<-fivenum(data$speechiness)
+data_seechinnes<-data.frame(etiquetas=etiquetas,valores=valores)  
+  data_seechinnes
+```
+
+Los valores para el speechiness:
+
+Mínimo 0.02530\
+1er Cuartil 0.04660\
+Mediana 0.06000\
+3er Cuartil 0.09235\
+Máximo 0.90600
+
+La observación de estos datos, respaldada por la representación visual proporcionada por el boxplot, sugiere una distribución asimétrica positiva. Este patrón indica que la mayoría de las observaciones se encuentran concentradas en la parte inferior del rango, mientras que existen algunas observaciones extremadamente altas que afectan la simetría de la distribución. La cola derecha más larga indica la presencia de valores atípicos hacia los extremos superiores.
+
+```{r}
+valores<-fivenum(data$tempo)
+data_tempo<-data.frame(etiquetas=etiquetas,valores=valores)  
+  data_tempo
+```
+
+```{r}
+boxplot(data$tempo, horizontal = TRUE, axes = TRUE, staplewex = 1)
+```
+
+No son evidentes valores atípicos para el tempo; el diagrama de caja muestra que no tenemos valores que estén fuera del rango del bigote. Esto indica que la mayoría de las observaciones están concentradas dentro de la variabilidad intercuartílica y no hay indicios visuales de puntos extremos que puedan considerarse atípicos.
+
+```{r}
+columnas <- names(data)
+minv <- apply(data, 2, min)
+maxv <- apply(data, 2, max)
+tablaestadistica <- data.frame(etiquetas = columnas, valores_minimos = minv, valores_maximos = maxv)
+tablaestadistica
+```
+
+Esta consulta nos permite encontrar una duracion maxima de 913052. Procedemos a analizar la entrada de esos datos.
+
+```{r}
+max_duracion<-subset(data, duration_ms==913052)
+max_duracion
+```
+
+```{r}
+boxplot(data$duration_ms, horizontal = TRUE, axes = TRUE, staplewex = 1)
+text(x = fivenum(data$duration_ms), y = rep(0.8, 5), labels = as.character(fivenum(data$duration_ms)), pos = 2)
+```
+
+```{r}
+valores<-fivenum(data$duration_ms)
+data_duration<-data.frame(etiquetas=etiquetas,valores=valores)  
+  data_duration
+
+```
+
+```{r}
+max_atipico<-subset(data, duration_ms>900052)
+```
+
+Es màs intuitivo manejar los datos de tiempo en minutos.
+
+```{r}
+duracion_min<-(data$duration_ms/1000)/60
+data$duracion_min<-duracion_min
+data
+```
+
+```{r}
+valores<-fivenum(data$duracion_min)
+valores
+data_valores<-data.frame(etiquetas=etiquetas, valores=valores)
+data_valores
+```
+
+```{r}
+names(data)
+class(data$du)
+```
+
+```{r}
+class(data)
+library(dplyr)
+```
+
+```{r}
+data <- data%>%
+  mutate(quetanlargaes = case_when(
+    duracion_min < 2 ~ "Muy Corta",
+    duracion_min < 4 ~ "Corta",
+    duracion_min < 10 ~ "Normal",
+    duracion_min < 16 ~ "Larga",
+    TRUE ~ "Muy Larga"  # Valor por defecto, si no cumple ninguna condición
+  ))
+
+```
+
+```{r}
+data <- data %>%
+  mutate(categoria_speechiness = case_when(
+    speechiness < 0.3 ~ "Instrumental",  # Música predominantemente instrumental
+    speechiness < 0.5 ~ "Para Relajarse",  # Música con baja presencia vocal
+    speechiness < 0.7 ~ "Para Escuchar",  # Música adecuada para escuchar y disfrutar
+    speechiness < 0.85 ~ "Para Bailar",  # Música con ritmo para bailar
+    TRUE ~ "Energética"  # Valor por defecto, música con alta presencia vocal y energía
+  ))
+
+```
+
+```{r}
+data <- data%>%
+  mutate(quetanlargaes = case_when(
+    danceability < 0.5 ~ " Es para Besar",
+    danceability < 0.6 ~ "Es para Dialogar",
+    danceability < 0.75 ~ "Es para Danzar",
+    TRUE ~ "Es para quema de Kcal"  # Valor por defecto, si no cumple ninguna condición
+  ))
+
+```
+
+Usando el comando summary podemos tener un resumen descriptivo de la base
+
+```{r}
+summary(data)
+```
+
+```{r}
+prom<-mean(data$duracion_min)
+prom
+```
+
+```{r}
+vari<-var(data$duracion_min)
+vari
+```
+
+```{r}
+prop.table(table(data$quetanlargaes))
+
+```
+
+# Analisis Univariado
+
+Procede ahora al análisis univariado, una fase esencial en la exploración de datos. En esta etapa, se centra en examinar individualmente cada variable de interés, explorando sus características, distribuciones y tendencias. Este enfoque proporciona una comprensión detallada de la información contenida en cada variable por separado. A través del análisis univariado, se busca identificar patrones, anomalías y tendencias que podrían influir en el entendimiento global del conjunto de datos.
+
+```{r}
+data <- data%>%
+  mutate(Aprox_time = case_when(
+    between(duration_ms,0,60)~1,
+    between(duration_ms,61,180)~2,
+    between(duration_ms,181,300)~3,
+    TRUE ~ 4  # Valor por defecto, si no cumple ninguna condición
+  ))
+```
+
+```{r}
+hist(data$tempo)
+```
+
+```{r}
+boxplot(data$energy, horizontal=TRUE)
+text(x=fivenum(data$energy),labels=fivenum(data$energy),y=1.25)
+
+```
+
+```{r}
+prop.table(table(data$quetanlargaes))
+tab<-data.frame(prop.table(table(data$quetanlargaes)))
+tab
+```
+
+```{r}
+p <- ggplot(data = tab, aes(x = Var1, y = Freq)) +
+  geom_bar(stat = "identity")
+p
+```
+
+```{r}
+subdata<-subset(data,select=-c(quetanlargaes,title,genre,
+                               type,id,uri,analysis_url,track_href,song_name ))
+str(subdata)
+corrplot(cor(subdata), method = "color")
+
+```
+
+```{r}
+
+library("ggdist")
+
+```
+
+```{r}
+q <- ggplot(data, aes(x = quetanlargaes, y = instrumentalness)) +geom_violin(trim=FALSE)+stat_summary(fun.data = "mean_sld",
+                   geom = "crossbar",width=0.2                                                                                )
+q
+```
+
+```{r}
+library("reticulate")
+use_python('C:/Users/Direccion Ser/AppData/Local/Programs/Python/Python310/python.exe')
+```
+
+```{r}
+reticulate::py_install("seaborn")
+
+
+```
+
+```{r}
+virtualenv_create("C:/Users/Direccion Ser/Documents/.virtualenvs/r-reticulate")
+use_virtualenv("C:/Users/Direccion Ser/Documents/.virtualenvs/r-reticulate")
+reticulate::py_install("numpy")
+reticulate::py_install("seaborn")
+numpy <- import("numpy")
+seaborn <- import("seaborn")
+
+
+```
+
+# Analisis Bivariado
+
+```{r}
+seaborn$pairplot(subdata)
+
+```
+
+```{r, echo=TRUE}
+q <- ggplot(data, aes(x = quetanlargaes, y = instrumentalness))+geom_boxplot()+geom_jitter(width = 0.1,
+                                                                                           alpha=0.2)
+print(q)
+```
+
+# Analisis Multivariado
+
+```{r, echo=TRUE}
+names(data)
+```
+
+```{r, echo=TRUE}
+q <- ggplot(data, aes(x = quetanlargaes, y = instrumentalness, fill=categoria_speechiness))+geom_jitter(width = 0.1,
+                                                                                           alpha=0.2)+geom_boxplot()
+print(q)
+```
+
+```{r}
+DataExplorer::create_report(subdata)
+```
+
+
